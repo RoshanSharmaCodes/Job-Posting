@@ -1,23 +1,24 @@
-import React, { useEffect, useState } from 'react'
-import Banner from '../Components/Banner'
+import React, { useEffect, useState } from "react"
+import Banner from "../Components/Banner"
+import Card from "../Components/Card"
+import Jobs from "./Jobs"
 
 export default function Home() {
-
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [jobs, setJobs] = useState([])
   const [position, setPosition] = useState("")
-  
-  var handlePositionChange = (e) =>{
+
+  var handlePositionChange = (e) => {
     setPosition(e.target.value)
-    console.log(position)
   }
 
-  useEffect(()=>{
-    fetch("jobs.json").then(res=> res.json()).then(data=> setJobs(data))
-  },[])
-  
+  useEffect(() => {
+    fetch("jobs.json")
+      .then((res) => res.json())
+      .then((data) => setJobs(data))
+  }, [])
 
-  const filterItems = jobs.filter(job=> job.jobTitle.toLowerCase().indexOf(position.toLowerCase()) != -1)
+  const filterItems = jobs.filter((job) => job.jobTitle.toLowerCase().indexOf(position.toLowerCase()) != -1)
 
   // Radio Based Filtering
   const handleChangeCategory = (e) => {
@@ -29,20 +30,39 @@ export default function Home() {
     setSelectedCategory(e.target.value)
   }
 
-  const filterData = (job, selected, query) =>{
+  const filterData = (job, selected, query) => {
     let filteredJobs = jobs
 
-    if(query){
+    if (query) {
       filteredJobs = filterItems
     }
 
-    if(selected){
-      
+    if (selected) {
+      filteredJobs = filteredJobs.filter(
+        ({ jobLocation, maxPrice, experienceLevel, salaryType, employmentType }) =>
+          jobLocation.toLowerCase() === selected.toLowerCase() ||
+          experienceLevel.toLowerCase() === selected.toLowerCase() ||
+          salaryType.toLowerCase() === selected.toLowerCase() ||
+          parseInt(maxPrice) === parseInt(selected) ||
+          employmentType.toLowerCase() === selected.toLowerCase()
+      )
     }
+
+    return filteredJobs.map((data, i) => <Card key={i} data={data} />)
   }
 
+  const results = filterData(jobs, selectedCategory, position)
 
   return (
-    <Banner position={position} handlePositionChange={handlePositionChange}/>
+    <div>
+      <Banner position={position} handlePositionChange={handlePositionChange} />
+
+      {/* Main Content */}
+      <div className="bg-[#FAFAFA] md:grid grid-cols-4 gap-8 lg:px-24 px-4 py-12">
+        <div className="bg-white p-4 rounded">Left</div>
+        <div className="bg-white col-span-2 p-4 rounded-sm"><Jobs cardData={results} /></div>
+        <div className="bg-white p-4 rounded">Right</div>
+      </div>
+    </div>
   )
 }
