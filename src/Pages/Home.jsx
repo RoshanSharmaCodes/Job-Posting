@@ -67,7 +67,7 @@ export default function Home() {
           jobLocation.toLowerCase() === selected.toLowerCase() ||
           experienceLevel.toLowerCase() === selected.toLowerCase() ||
           salaryType.toLowerCase() === selected.toLowerCase() ||
-          parseInt(maxPrice) === parseInt(selected) ||
+          parseInt(maxPrice) <= parseInt(selected) ||
           employmentType.toLowerCase() === selected.toLowerCase()
       )
     }
