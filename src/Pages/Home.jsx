@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react"
 import Banner from "../Components/Banner"
 import Card from "../Components/Card"
 import Jobs from "./Jobs"
+import Sidebar from "../Sidebar/Sidebar"
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [jobs, setJobs] = useState([])
   const [position, setPosition] = useState("")
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 6
 
   var handlePositionChange = (e) => {
     setPosition(e.target.value)
@@ -22,6 +25,7 @@ export default function Home() {
 
   // Radio Based Filtering
   const handleChangeCategory = (e) => {
+    console.log("Handle Change Category Called")
     setSelectedCategory(e.target.value)
   }
 
@@ -31,6 +35,7 @@ export default function Home() {
   }
 
   const filterData = (job, selected, query) => {
+    console.log("Filter Data Function Called")
     let filteredJobs = jobs
 
     if (query) {
@@ -59,7 +64,7 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="bg-[#FAFAFA] md:grid grid-cols-4 gap-8 lg:px-24 px-4 py-12">
-        <div className="bg-white p-4 rounded">Left</div>
+        <div className="bg-white p-4 rounded"><Sidebar handleChangeCategory={handleChangeCategory} handleClickCategory={handleClickCategory} /></div>
         <div className="bg-white col-span-2 p-4 rounded-sm"><Jobs cardData={results} /></div>
         <div className="bg-white p-4 rounded">Right</div>
       </div>
