@@ -14,7 +14,6 @@ export default function WorkType({ handleChangeCategory }) {
         <RadioInput handleChangeCategory={handleChangeCategory} title={"Full-time"} value={"Full-time"} name={"worktype"} />
         <RadioInput handleChangeCategory={handleChangeCategory} title={"Temporary"} value={"Temporary"} name={"worktype"} />
         <RadioInput handleChangeCategory={handleChangeCategory} title={"Part-time"} value={"Part-time"} name={"worktype"} />
-        <RadioInput handleChangeCategory={handleChangeCategory} title={"Part-time"} value={"Part-time"} name={"worktype"} />
       </div>
     </div>
   )

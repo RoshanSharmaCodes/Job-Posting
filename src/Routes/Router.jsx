@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom"
 import App from "../App"
 import Home from "../Pages/Home"
+import CreateJob from "../Pages/CreateJob"
 
 const Router = createBrowserRouter([
   {
@@ -10,6 +11,10 @@ const Router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/Post-Job",
+        element: <CreateJob/>,
       },
     ],
   },
