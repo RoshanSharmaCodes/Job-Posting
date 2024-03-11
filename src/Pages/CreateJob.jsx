@@ -6,15 +6,28 @@ export default function CreateJob() {
   const {
     register,
     handleSubmit,
+    reset,
     watch,
     formState: { errors },
   } = useForm()
 
-  const onSubmit = (data) => {
-    console.log(data)
-  }
-
   const [selectedOption, setSelectedOption] = useState(null)
+
+  const onSubmit = (data) => {
+    data.skills = selectedOption
+    console.log("Post Job", data)
+    fetch("http://localhost:3000/post-job", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data) })
+      .then((data) => data.json())
+      .then((result) => {
+        console.log("Result:", result)
+        if (result.acknowledged) {
+          alert("Job Posted Successfully")
+        } else {
+          alert("Job Posting Failed. Try again later.")
+        }
+        reset()
+      })
+  }
 
   const options = [
     { value: "JavaScript", label: "JavaScript" },
@@ -119,11 +132,17 @@ export default function CreateJob() {
             </div>
           </div>
 
-            {/* 7th Row */}
-            <div className="create-job-flex">
+          {/* 7th Row */}
+          <div className="create-job-flex">
             <div className="w-full">
               <label className="block mb-2 text-lg">Job Description</label>
-              <textarea rows={6} type="email" placeholder={"Paste your Job description here..."} {...register("description")} className="w-full pl-3 py-1.5 focus:outline-none placeholder:text-gray-400" ></textarea>
+              <textarea
+                rows={6}
+                type="email"
+                placeholder={"Paste your Job description here..."}
+                {...register("description")}
+                className="w-full pl-3 py-1.5 focus:outline-none placeholder:text-gray-400"
+              ></textarea>
             </div>
           </div>
 
@@ -134,7 +153,6 @@ export default function CreateJob() {
               <input type="email" placeholder={"hr@domain.com"} {...register("jobPostedBy")} className="create-job-input" />
             </div>
           </div>
-
 
           <input type="submit" className="mt-12 border text-white bg-blue cursor-pointer rounded-md py-2 px-8 font-semibold" />
         </form>

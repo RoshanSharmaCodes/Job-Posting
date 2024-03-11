@@ -16,6 +16,10 @@ const Router = createBrowserRouter([
         path: "/Post-Job",
         element: <CreateJob/>,
       },
+      {
+        path: "/My-Jobs",
+        element: <CreateJob/>,
+      },
     ],
   },
   {
