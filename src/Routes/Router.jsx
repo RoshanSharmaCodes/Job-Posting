@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom"
 import App from "../App"
 import Home from "../Pages/Home"
 import CreateJob from "../Pages/CreateJob"
+import GetJob from "../Pages/GetJob"
 
 const Router = createBrowserRouter([
   {
@@ -18,7 +19,7 @@ const Router = createBrowserRouter([
       },
       {
         path: "/My-Jobs",
-        element: <CreateJob/>,
+        element: <GetJob/>,
       },
     ],
   },
