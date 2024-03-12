@@ -11,12 +11,12 @@ export default function Navbar() {
 
   const navItems = [
     {
-      path: "/Post-Job",
-      title: "Post Jobs",
-    },
-    {
       path: "/",
       title: "Search Jobs",
+    },
+    {
+      path: "/Post-Job",
+      title: "Post Jobs",
     },
     {
       path: "/Salary-Estimate",

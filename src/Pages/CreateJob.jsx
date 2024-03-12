@@ -94,7 +94,7 @@ export default function CreateJob() {
           <div className="create-job-flex">
             <div className="lg:w-1/2 w-full">
               <label className="block mb-2 text-lg">Experience Level</label>
-              <select {...register("salaryType", { required: true })} className="create-job-input">
+              <select {...register("experienceLevel", { required: true })} className="create-job-input">
                 <option value="No Experience">No Experience</option>
                 <option value="Internship">Internship</option>
                 <option value="Experience">Experience</option>
