@@ -3,6 +3,7 @@ import App from "../App"
 import Home from "../Pages/Home"
 import CreateJob from "../Pages/CreateJob"
 import GetJob from "../Pages/GetJob"
+import SalaryEst from "../Pages/SalaryEst"
 
 const Router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const Router = createBrowserRouter([
         path: "/My-Jobs",
         element: <GetJob/>,
       },
+      {
+        path: "/Salary-Estimate",
+        element: <SalaryEst/>
+      }
     ],
   },
   {

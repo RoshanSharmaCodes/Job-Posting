@@ -19,7 +19,7 @@ export default function Navbar() {
       title: "Search Jobs",
     },
     {
-      path: "/Salary",
+      path: "/Salary-Estimate",
       title: "Salary Estimate",
     },
     {
