@@ -10,7 +10,6 @@ export default function Card({data}) {
         <div>
           <h4 className='text-primary mb-1'>{data.companyName}</h4>
           <h3 className='text-lg font-semibold mb-2'>{data.jobTitle}</h3>
-
           <div className='flex flex-wrap gap-2 mb-2 text-base text-primary/70'>
             <span className='flex items-center gap-1'><FiMapPin/>{data.jobLocation}</span>
             <span className='flex items-center gap-1'><FiClock/>{data.employmentType}</span>
@@ -21,6 +20,7 @@ export default function Card({data}) {
           <p className='text-base text-primary/70'>{data.description}</p>
         </div>
       </Link>
+      <button className="border p-2 bg-green-500 text-white hover:bg-white hover:border-green-500 hover:text-green-500">Apply</button>
     </section>
   )
 }

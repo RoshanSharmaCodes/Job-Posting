@@ -7,7 +7,7 @@ export default function Banner({positon, handlePositionChange}) {
       <h1 className="text-5xl font-bold mb-3 text-primary">
         This could be <span className="text-blue">Life Changing...</span>
       </h1>
-      <p className="text-lg text-black/70 mb-8">Thousands of Remote Jobs are awaiting for you, Take the first step towards success.</p>
+      <p className="text-lg text-black/70 mb-8">Thousands of Remote Projects are awaiting for you, Take the first step towards success.</p>
 
       <form>
         <div className="flex justify-start md:flex-row flex-col md:gap-0 gap-4">

@@ -1,9 +1,41 @@
 import React, { useState } from "react"
 import { Link, NavLink } from "react-router-dom"
 import { FaAlignJustify, FaXmark } from "react-icons/fa6";
+import {GoogleAuthProvider, getAuth, signInWithPopup} from "firebase/auth"
+import firebaseApp from "../Firebase/firebase.config";
 
 export default function Navbar() {
+  
   const [isModalOpen, setModalOpen] = useState(false)
+
+  const auth = getAuth()
+  const googleAuth = new GoogleAuthProvider()
+
+  const handleLogin = () => {
+    // signInWithPopup(auth, googleAuth).then((result) => {
+    //   // This gives you a Google Access Token. You can use it to access the Google API.
+    //   const credential = GoogleAuthProvider.credentialFromResult(result);
+    //   const token = credential.accessToken;
+    //   // The signed-in user info.
+    //   const user = result.user;
+
+    //   console.log("User",user)
+    //   console.log("Token", token)
+
+    //   // IdP data available using getAdditionalUserInfo(result)
+    //   // ...
+    // }).catch((error) => {
+    //   // Handle Errors here.
+    //   const errorCode = error.code;
+    //   const errorMessage = error.message;
+    //   // The email of the user's account used.
+    //   const email = error.customData.email;
+    //   // The AuthCredential type that was used.
+    //   const credential = GoogleAuthProvider.credentialFromError(error);
+    //   // ...
+    // });
+  }
+
 
   const handleMenuToggle = () => {
     setModalOpen(!isModalOpen)
@@ -26,6 +58,14 @@ export default function Navbar() {
       path: "/My-Jobs",
       title: "My Jobs",
     },
+    {
+      path: "/AppliedJobs",
+      title: "Applied Jobs"
+    },
+    {
+      path: "/Profile",
+      title: "My Profile"
+    }
   ]
   return (
     <header className="max-w-screen-2xl container mx-auto xl:px-24 px-4">
@@ -56,7 +96,7 @@ export default function Navbar() {
 
         {/* Action Buttons */}
         <div className="text-base text-primary font-medium space-x-5 hidden lg:block">
-            <Link to={"/LogIn"} className="py-2 px-5 border rounded">Log In</Link>
+            <Link to={"/Login"} className="py-2 px-5 border rounded">Log In</Link>
             <Link to={"/SignUp"} className="py-2 px-5 border rounded bg-blue text-white">Sign Up</Link>
         </div>
         
