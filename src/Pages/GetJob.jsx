@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
 
 export default function GetJob() {
-  const email = "abc@hr.com"
+  const profileInfo = useSelector((state) => state.profileReducer)
+  const userId = profileInfo.info.userId
   const [job, setJobs] = useState([])
   const [searchText, setSearchText] = useState("")
   const [isLoading, setLoading] = useState(false)
@@ -30,7 +32,7 @@ export default function GetJob() {
 
   useEffect(() => {
     setLoading(true)
-    fetch(`http://localhost:3000/my-jobs/${email}`, { method: "GET" })
+    fetch(`http://localhost:3000/Jobs/my-jobs/${userId}`, { method: "GET" })
       .then((data) => data.json())
       .then((result) => setJobs(result)).then(()=>{
         setLoading(false)
@@ -99,6 +101,9 @@ export default function GetJob() {
                       Edit
                     </th>
                     <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                      View
+                    </th>
+                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                       Delete
                     </th>
                   </tr>
@@ -118,6 +123,11 @@ export default function GetJob() {
                         <button className="bg-yellow-300 py-2 px-3.5">
                           <Link to={`/edit-job/${data._id}`}>Edit</Link>
                         </button>
+                      </td>
+                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <a target="_blank" href={`/JobProfile/${data.jobId}`} className="bg-blue py-2 px-2.5 text-white">
+                          View
+                        </a>
                       </td>
                       <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                         <button onClick={() => handleDeleteJob(data._id)} className="bg-red-500 py-2 px-2.5 text-white">

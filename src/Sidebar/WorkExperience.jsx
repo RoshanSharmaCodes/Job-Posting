@@ -12,8 +12,9 @@ export default function WorkExperience({ handleChangeCategory }) {
           <span className="checkmark"></span> All
         </label> 
         <RadioInput handleChangeCategory={handleChangeCategory} title={"Internship"} value={"Internship"} name={"workexp"} />
-        <RadioInput handleChangeCategory={handleChangeCategory} title={"Any-experience"} value={"Any-experience"} name={"workexp"} />
-        <RadioInput handleChangeCategory={handleChangeCategory} title={"Work-remotely"} value={"Work-remotely"} name={"workexp"} />
+        <RadioInput handleChangeCategory={handleChangeCategory} title={"Intermediate"} value={"Intermediate"} name={"workexp"} />
+        <RadioInput handleChangeCategory={handleChangeCategory} title={"Beginner"} value={"Beginner"} name={"workexp"} />
+        <RadioInput handleChangeCategory={handleChangeCategory} title={"Expert"} value={"Expert"} name={"workexp"} />
       </div>
     </div>
   )

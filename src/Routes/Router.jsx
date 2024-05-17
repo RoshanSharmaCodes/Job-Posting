@@ -8,7 +8,10 @@ import EditJob from "../Pages/EditJob"
 import LoginPage from "../Pages/LoginPage"
 import SignupPage from "../Pages/SignupPage"
 import ProfilePage from "../Pages/ProfilePage"
+
 import { AppliedJobs } from "../Pages/AppliedJobs"
+import { JobProfile } from "../Pages/JobProfile"
+import { UserProfile } from "../Pages/UserProfile"
 
 const Router = createBrowserRouter([
   {
@@ -51,6 +54,14 @@ const Router = createBrowserRouter([
       {
         path: "/AppliedJobs",
         element: <AppliedJobs/>
+      },
+      {
+        path: "/JobProfile/:id",
+        element: <JobProfile/>
+      },
+      {
+        path: "/Resume/:id",
+        element: <UserProfile/>
       }
     ],
   },

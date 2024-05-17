@@ -11,7 +11,7 @@ export const AppliedJobs = () => {
   return (
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4">
       <div className="bg-[#FAFAFA] py-10 px-4 lg:px-16">
-        { jobs.map( (data) => <Card data={data}/>)}
+        { jobs.map( (data) => <Card data={data} apply={false} del={true}/>)}
       </div>
     </div>
   )

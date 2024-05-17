@@ -1,76 +1,60 @@
 import React, { useState } from "react"
-import { Link, NavLink } from "react-router-dom"
-import { FaAlignJustify, FaXmark } from "react-icons/fa6";
-import {GoogleAuthProvider, getAuth, signInWithPopup} from "firebase/auth"
-import firebaseApp from "../Firebase/firebase.config";
+import { Link, NavLink, useNavigate } from "react-router-dom"
+import { FaAlignJustify, FaXmark } from "react-icons/fa6"
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth"
+import firebaseApp from "../Firebase/firebase.config"
+import { useDispatch, useSelector } from "react-redux"
+import { deleteProfileData } from "../Store/Slicers/ProfileSlicer"
 
 export default function Navbar() {
-  
   const [isModalOpen, setModalOpen] = useState(false)
-
-  const auth = getAuth()
-  const googleAuth = new GoogleAuthProvider()
-
-  const handleLogin = () => {
-    // signInWithPopup(auth, googleAuth).then((result) => {
-    //   // This gives you a Google Access Token. You can use it to access the Google API.
-    //   const credential = GoogleAuthProvider.credentialFromResult(result);
-    //   const token = credential.accessToken;
-    //   // The signed-in user info.
-    //   const user = result.user;
-
-    //   console.log("User",user)
-    //   console.log("Token", token)
-
-    //   // IdP data available using getAdditionalUserInfo(result)
-    //   // ...
-    // }).catch((error) => {
-    //   // Handle Errors here.
-    //   const errorCode = error.code;
-    //   const errorMessage = error.message;
-    //   // The email of the user's account used.
-    //   const email = error.customData.email;
-    //   // The AuthCredential type that was used.
-    //   const credential = GoogleAuthProvider.credentialFromError(error);
-    //   // ...
-    // });
-  }
-
-
+  const dispatch  = useDispatch()
+  const navigate = useNavigate()
+  const profileInfo = useSelector((state) => state.profileReducer)
   const handleMenuToggle = () => {
     setModalOpen(!isModalOpen)
+  }
+
+  const handleLogOut = () => {
+    dispatch(deleteProfileData())
+    navigate("/")
   }
 
   const navItems = [
     {
       path: "/",
       title: "Search Jobs",
+      hide: true
     },
     {
       path: "/Post-Job",
       title: "Post Jobs",
+      hide: profileInfo.active
     },
     {
       path: "/Salary-Estimate",
       title: "Salary Estimate",
+      hide: true
     },
     {
       path: "/My-Jobs",
       title: "My Jobs",
+      hide: profileInfo.active
     },
     {
       path: "/AppliedJobs",
-      title: "Applied Jobs"
+      title: "Applied Jobs",
+      hide: profileInfo.active
     },
     {
       path: "/Profile",
-      title: "My Profile"
-    }
+      title: "My Profile",
+      hide: profileInfo.active
+    },
   ]
   return (
     <header className="max-w-screen-2xl container mx-auto xl:px-24 px-4">
       <nav className="flex justify-between items-center py-6">
-
         {/* Main Logo */}
         <a href="/" className="flex items-center gap-2 text-2xl">
           <span>
@@ -80,7 +64,7 @@ export default function Navbar() {
 
         {/* NavBar Menu Items */}
         <ul className="hidden md:flex gap-12">
-          {navItems.map(({path, title}) => (
+          {navItems.map(({ path, title, hide}) =>  hide && ( 
             <li key={path} className="text-base text-primary">
               <NavLink
                 to={path}
@@ -96,22 +80,34 @@ export default function Navbar() {
 
         {/* Action Buttons */}
         <div className="text-base text-primary font-medium space-x-5 hidden lg:block">
-            <Link to={"/Login"} className="py-2 px-5 border rounded">Log In</Link>
-            <Link to={"/SignUp"} className="py-2 px-5 border rounded bg-blue text-white">Sign Up</Link>
+          {profileInfo.active == false && (
+            <Link to={"/Login"} className="py-2 px-5 border rounded">
+              Log In
+            </Link>
+          )}
+          {profileInfo.active == false && (
+            <Link to={"/SignUp"} className="py-2 px-5 border rounded bg-blue text-white">
+              Sign Up
+            </Link>
+          )}
+          {profileInfo.active == true && (
+            <Link to={"/"} onClick={handleLogOut} className="py-2 px-5 border rounded bg-blue text-white">
+              Log Out
+            </Link>
+          )}
         </div>
-        
+
         {/* Menu Bar for Mobile */}
         <div className="md:hidden block">
-            <button onClick={handleMenuToggle}>{isModalOpen? <FaXmark className="w-5 h-5 text-primary"/> : <FaAlignJustify className="w-5 h-5 text-primary"/>}</button>
+          <button onClick={handleMenuToggle}>
+            {isModalOpen ? <FaXmark className="w-5 h-5 text-primary" /> : <FaAlignJustify className="w-5 h-5 text-primary" />}
+          </button>
         </div>
-
-     
-
       </nav>
-         {/* Navbar for Mobile */}
-         <div className={`px-4 bg-blue py-5 rounded-sm ${isModalOpen?"text-white":"hidden"}`}>
-            <ul>
-            {navItems.map(({path, title}) => (
+      {/* Navbar for Mobile */}
+      <div className={`px-4 bg-blue py-5 rounded-sm ${isModalOpen ? "text-white" : "hidden"}`}>
+        <ul>
+          {navItems.map(({ path, title }) => (
             <li key={path} className=" text-white py-1">
               <NavLink
                 to={path}
@@ -123,10 +119,11 @@ export default function Navbar() {
               </NavLink>
             </li>
           ))}
-          <Link to={"/LogIn"} className=" text-white py-1">Log In</Link>
-            </ul>
-             
-        </div>
+          <Link to={"/LogIn"} className=" text-white py-1">
+            Log In
+          </Link>
+        </ul>
+      </div>
     </header>
   )
 }

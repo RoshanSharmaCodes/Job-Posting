@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
 import CreatableSelect from "react-select/creatable"
+import { useDispatch, useSelector } from "react-redux"
 
 export default function CreateJob() {
   const {
@@ -12,11 +13,13 @@ export default function CreateJob() {
   } = useForm()
 
   const [selectedOption, setSelectedOption] = useState(null)
+  const profileInfo = useSelector((state) => state.profileReducer)
 
   const onSubmit = (data) => {
     data.skills = selectedOption
+    data.createdBy = profileInfo.info.userId
     console.log("Post Job", data)
-    fetch("http://localhost:3000/post-job", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data) })
+    fetch("http://localhost:3000/Jobs/post-job", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data) })
       .then((data) => data.json())
       .then((result) => {
         console.log("Result:", result)
@@ -95,9 +98,10 @@ export default function CreateJob() {
             <div className="lg:w-1/2 w-full">
               <label className="block mb-2 text-lg">Experience Level</label>
               <select {...register("experienceLevel", { required: true })} className="create-job-input">
-                <option value="No Experience">No Experience</option>
                 <option value="Internship">Internship</option>
-                <option value="Experience">Experience</option>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Expert">Expert</option>
               </select>
             </div>
 
@@ -122,7 +126,7 @@ export default function CreateJob() {
               <select {...register("employmentType", { required: true })} className="create-job-input">
                 <option value="Part-time">Part-time</option>
                 <option value="Full-time">Full-time</option>
-                <option value="Temporary">Temporary</option>
+                <option value="Contractual">Contractual</option>
               </select>
             </div>
 

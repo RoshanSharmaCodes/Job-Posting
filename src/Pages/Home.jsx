@@ -9,6 +9,7 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [jobs, setJobs] = useState([])
   const [position, setPosition] = useState("")
+  const [company, setCompany] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
 
@@ -16,17 +17,22 @@ export default function Home() {
     setPosition(e.target.value)
   }
 
+  var handleCompanyChange = (e) => {
+    setCompany(e.target.value)
+  }
+
   useEffect(() => {
-    fetch("jobs.json")
+    fetch("http://localhost:3000/Jobs/all-jobs")
       .then((res) => res.json())
       .then((data) => setJobs(data))
   }, [])
 
-  const filterItems = jobs.filter((job) => job.jobTitle.toLowerCase().indexOf(position.toLowerCase()) != -1)
+  var filterItems = jobs.filter((job) => job.jobTitle.toLowerCase().indexOf(position.toLowerCase()) != -1 && job.companyName.toLowerCase().indexOf(company.toLowerCase()) != -1)
+  console.log("Filtered Items", filterItems)
+  console.log("Company Search", company)
 
   // Radio Based Filtering
   const handleChangeCategory = (e) => {
-    console.log("Handle Change Category Called")
     setSelectedCategory(e.target.value)
   }
 
@@ -54,7 +60,7 @@ export default function Home() {
     }
   }
 
-  const filterData = (job, selected, query) => {
+  const filterData = (job, selected, query, company) => {
     console.log("Filter Data Function Called")
     let filteredJobs = jobs
 
@@ -75,14 +81,14 @@ export default function Home() {
 
     const {startIdx, endIdx} = getJobPageIndex()
     filteredJobs = filteredJobs.slice(startIdx, endIdx)
-    return filteredJobs.map((data, i) => <Card key={i} data={data} />)
+    return filteredJobs.map((data, i) => <Card key={i} data={data} apply={true}/>)
   }
 
-  const results = filterData(jobs, selectedCategory, position)
+  const results = filterData(jobs, selectedCategory, position, company)
 
   return (
     <div>
-      <Banner position={position} handlePositionChange={handlePositionChange} />
+      <Banner position={position} handleCompanyChange={handleCompanyChange} handlePositionChange={handlePositionChange} />
 
       {/* Main Content */}
       <div className="bg-[#FAFAFA] md:grid grid-cols-4 gap-8 lg:px-24 px-4 py-12">
