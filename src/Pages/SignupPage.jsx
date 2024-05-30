@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { handleEmailandPasswordSignUp } from "../Firebase/authentication";
 
 function SignupPage() {
 
@@ -12,17 +13,9 @@ function SignupPage() {
   } = useForm()
 
   const handleSignUp = (data) => {
-    fetch("http://localhost:3000/User/SignUp", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data) })
-    .then((data) => data.json())
-    .then((result) => {
-      console.log("Result:", result)
-      if (result.acknowledged) {
-        alert("User Sign Up Successfully")
-      } else {
-        alert("Sign Up Failed. Try again later.")
-      }
-      reset()
-    })
+    if(data.password === data.confirmPassword){
+      handleEmailandPasswordSignUp(data.emailId, data.password)
+    }
   }
 
   return (

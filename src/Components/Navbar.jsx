@@ -5,6 +5,7 @@ import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth"
 import firebaseApp from "../Firebase/firebase.config"
 import { useDispatch, useSelector } from "react-redux"
 import { deleteProfileData } from "../Store/Slicers/ProfileSlicer"
+import { handleSignOut } from "../Firebase/authentication"
 
 export default function Navbar() {
   const [isModalOpen, setModalOpen] = useState(false)
@@ -16,6 +17,7 @@ export default function Navbar() {
   }
 
   const handleLogOut = () => {
+    handleSignOut()
     dispatch(deleteProfileData())
     navigate("/")
   }

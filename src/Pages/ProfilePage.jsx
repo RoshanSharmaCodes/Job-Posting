@@ -1,7 +1,9 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { useDispatch, useSelector } from "react-redux"
-import { FiCalendar, FiPlus} from "react-icons/fi"
+import { useSelector } from "react-redux"
+import { FiMinus, FiPlus} from "react-icons/fi"
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import firebaseApp from "../Firebase/firebase.config"
 
 function ProfilePage() {
   const {
@@ -12,11 +14,16 @@ function ProfilePage() {
   } = useForm()
 
   const profileInfo = useSelector((state) => state.profileReducer)
-  const dispatch = useDispatch()
-  const [info, setProfileInfo] = useState(profileInfo.info)
+  const initialInfo = profileInfo.info || {}
+  const [info, setProfileInfo] = useState(initialInfo)
+  const [workExperience, setWorkExperience] = useState(initialInfo.workExperience || [{companyName: "", yearOfWork:"", jobDescription: ""}])
   var prefill = profileInfo.active ? true : false
+  const [cvUrl, setCvUrl] = useState("")
+
   const onSubmit = (data) => {
     console.log("Profile Data", data)
+    data.workExperience = workExperience
+    data.cv = cvUrl
     try {
       fetch("http://localhost:3000/User/Save", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data) })
         .then((data) => data.json())
@@ -30,57 +37,52 @@ function ProfilePage() {
   }
 
   const handleAddMoreWorkExp = () => {
-    // Add a new work experience field
-    const workExpField = (
-      <div key={info.workExperience.length} className="w-full">
-        <div className="create-job-flex">
-          <div className="lg:w-1/2 w-full sm:mb-0">
-            <label className="block mb-2 text-lg sm:mb-0">Company Name</label>
-            <input
-              type="text"
-              {...register(`workExperience[${info.workExperience.length}].companyName`)}
-              className="create-job-input"
-            />
-          </div>
-          <div className="lg:w-1/2 w-full">
-            <label className="block mb-2 text-lg">Year</label>
-            <select
-              {...register(`workExperience[${info.workExperience.length}].yearOfWork`)}
-              className="create-job-input"
-            >
-              {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-        <div className="w-full">
-          <label className="block mb-2 text-lg">Work Description</label>
-          <input
-            type="text"
-            {...register(`workExperience[${info.workExperience.length}].jobDescription`)}
-            className="create-job-input"
-          />
-        </div>
-      </div>
-    )
-    setProfileInfo((prev) => ({
-      ...prev,
-      workExperience: [...prev.workExperience, { companyName: "", yearOfWork: "", jobDescription: "" }],
-    }))
+    setWorkExperience([...workExperience, { companyName: "", yearOfWork: "", jobDescription: "" }]);
   }
 
-  const collectWorkExperiences = () => {
-    // Collect all work experiences
-    const workExperiences = info.workExperience.map((exp) => ({
-      companyName: exp.companyName,
-      yearOfWork: exp.yearOfWork,
-      jobDescription: exp.jobDescription,
-    }))
-    return workExperiences
+  const handleRemoveWorkExperience = () => {
+    if (workExperience.length > 0) {
+      setWorkExperience(workExperience.slice(0, -1));
+    }
   }
+
+  const handleWorkExperienceChange = (index, event) => {
+    const { name, value } = event.target
+    console.log("Name and Value", name +" "+value)
+    const updatedWorkExperience = [...workExperience]
+    updatedWorkExperience[index][name] = value
+    setWorkExperience(updatedWorkExperience)
+  }
+
+  const handleUploadCV = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const storage = getStorage(firebaseApp);
+    const storageRef = ref(storage, `${info.userId}/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log(`Upload is ${progress}% done`);
+      },
+      (error) => {
+        console.error("Upload failed", error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log("File available at", downloadURL);
+          setCvUrl(downloadURL);
+        });
+      }
+    );
+  };
+
+  useEffect(()=>{
+    console.log("Work Experience", workExperience)
+  },[workExperience])
 
   return (
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4">
@@ -259,7 +261,8 @@ function ProfilePage() {
           {/* Upload CV */}
           <div>
             <label className="block mb-2 text-lg">Upload CV</label>
-            <input type="file" accept=".pdf, .doc, .docx" {...register("cv")} className="create-job-input" />
+            <input type="file" accept=".pdf, .doc, .docx" {...register("cv")} className="create-job-input" onChange={handleUploadCV}/>
+            <label>Download Resume: <a href={info.cv} className="underline text-blue">Click Here</a></label>
           </div>
 
           {/* Pitch */}
@@ -284,26 +287,27 @@ function ProfilePage() {
           </div>
           <div className="w-full" id="workExp">
           <h1 className="font-bold text-2xl">Work Experience</h1>
-          <div className="w-full">
+          {workExperience.map((data, index) => {return <div className="w-full" key={index}>
             <div className="create-job-flex">
               <div className="lg:w-1/2 w-full sm:mb-0">
                 <label className="block mb-2 text-lg sm:mb-0">Company Name</label>
                 {prefill == true ? (
                   <input
-                    onChange={(e) => setProfileInfo((prev) => ({ ...prev, linkedinUrl: e.target.value }))}
-                    defaultValue={info.companyName}
+                    onChange={(e) => handleWorkExperienceChange(index, e)}
+                    defaultValue={workExperience[index]?.companyName}
                     type="text"
-                    {...register("companyName")}
+                    name="companyName"
                     className="create-job-input"
+                    placeholder="Ex:Microsoft"
                   />
                 ) : (
-                  <input placeholder="https://www.linkedin.com/in/johncodes/" type="url" {...register("companyName")} className="create-job-input" />
+                  <input name="companyName" onChange={(e) => handleWorkExperienceChange(index, e)} placeholder="Ex:Microsoft" type="url" {...register("companyName")} className="create-job-input" />
                 )}
               </div>
               <div className="lg:w-1/2 w-full">
                 <label className="block mb-2 text-lg">Year</label>
                 {prefill == true ? (
-                  <select {...register("yearOfWork")} className="create-job-input">
+                  <select defaultValue={workExperience[index]?.yearOfWork} name="yearOfWork" onChange={(e) => handleWorkExperienceChange(index, e)} className="create-job-input">
                     {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map((year) => (
                       <option key={year} value={year}>
                         {year}
@@ -311,7 +315,7 @@ function ProfilePage() {
                     ))}
                   </select>
                 ) : (
-                  <select {...register("yearOfWork")} className="create-job-input">
+                  <select name="yearOfWork" onChange={(e) => handleWorkExperienceChange(index, e)} className="create-job-input">
                     {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map((year) => (
                       <option key={year} value={year}>
                         {year}
@@ -325,18 +329,21 @@ function ProfilePage() {
                 <label className="block mb-2 text-lg">Work Description</label>
                 {prefill == true ? (
                   <input
-                    onChange={(e) => setProfileInfo((prev) => ({ ...prev, linkedinUrl: e.target.value }))}
-                    defaultValue={info.jobDescription}
+                    onChange={(e) => handleWorkExperienceChange(index, e)}
+                    defaultValue={workExperience[index]?.jobDescription}
                     type="text"
-                    {...register("jobDescription")}
+                    name="jobDescription"
                     className="create-job-input"
+                    placeholder="Your role and work in the organization..."
                   />
                 ) : (
-                  <input placeholder="https://www.linkedin.com/in/johncodes/" type="url" {...register("jobDescription")} className="create-job-input" />
+                  <input name="jobDescription" onChange={(e) => handleWorkExperienceChange(index, e)} placeholder="Your role and work in the organization..." type="url"  className="create-job-input" />
                 )}
               </div>
-          </div>
-          <button onClick={handleAddMoreWorkExp} className="border p-1 bg-green-500 text-white rounded-md"><FiPlus/></button>
+          </div>})}
+          
+          <button type="button" onClick={handleAddMoreWorkExp} className="border p-1 bg-green-500 text-white rounded-md"><FiPlus/></button>
+          <button type="button" onClick={handleRemoveWorkExperience} className="border p-1 bg-red-500 text-white rounded-md"><FiMinus/></button>
           </div>
           <input value="Save Profile" type="submit" className="mt-12 border text-white bg-blue cursor-pointer rounded-md py-2 px-8 font-semibold" />
         </form>
