@@ -20,7 +20,7 @@ function LoginPage() {
     console.log(data)
     const res = handleEmailandPasswordLogin(data.emailId, data.password)
     if (res) {
-      fetch("https://job-posting-server-puce.vercel.app/User/Login", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data) })
+      fetch("https://job-posting-server.vercel.app/User/Login", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data) })
         .then((data) => data.json())
         .then((result) => {
           console.log("Result:", result)

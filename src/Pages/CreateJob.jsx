@@ -19,7 +19,7 @@ export default function CreateJob() {
     data.skills = selectedOption
     data.createdBy = profileInfo.info.userId
     console.log("Post Job", data)
-    fetch("https://job-posting-server-puce.vercel.app/Jobs/post-job", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data) })
+    fetch("https://job-posting-server.vercel.app/Jobs/post-job", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data) })
       .then((data) => data.json())
       .then((result) => {
         console.log("Result:", result)

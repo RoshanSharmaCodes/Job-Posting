@@ -8,7 +8,7 @@ export const JobProfile = () => {
 
   useEffect(()=>{
     try {
-      fetch(`https://job-posting-server-puce.vercel.app/Jobs/get-job/${jobId.id}`, { method: "GET", headers: { "content-type": "application/json" }})
+      fetch(`https://job-posting-server.vercel.app/Jobs/get-job/${jobId.id}`, { method: "GET", headers: { "content-type": "application/json" }})
         .then((data) => data.json())
         .then((result) => {
           setJob(result.job)

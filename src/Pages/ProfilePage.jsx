@@ -25,7 +25,7 @@ function ProfilePage() {
     data.workExperience = workExperience
     data.cv = cvUrl
     try {
-      fetch("https://job-posting-server-puce.vercel.app/User/Save", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data) })
+      fetch("https://job-posting-server.vercel.app/User/Save", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data) })
         .then((data) => data.json())
         .then((result) => {
           console.log("Result:", result)
