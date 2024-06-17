@@ -9,7 +9,7 @@ export const AppliedJobs = () => {
     useEffect(() => {
       try {
         console.log("Bfore Job Applied", profileInfo.appliedJobs)
-        fetch("https://job-posting-server.vercel.app/Jobs/applied-jobs", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({jobData: profileInfo.appliedJobs}) })
+        fetch("https://job-posting-server-puce.vercel.app/Jobs/applied-jobs", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({jobData: profileInfo.appliedJobs}) })
           .then((data) => data.json())
           .then((result) => {
             setJobs(result)

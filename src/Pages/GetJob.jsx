@@ -18,7 +18,7 @@ export default function GetJob() {
 
   const handleDeleteJob = (jobId) => {
     setLoading(true)
-    fetch(`https://job-posting-server.vercel.app/job/${jobId}`, { method: "DELETE" })
+    fetch(`https://job-posting-server-puce.vercel.app/job/${jobId}`, { method: "DELETE" })
       .then((data) => data.json())
       .then((data) => {
         if (data.acknowledged) {
@@ -32,7 +32,7 @@ export default function GetJob() {
 
   useEffect(() => {
     setLoading(true)
-    fetch(`https://job-posting-server.vercel.app/Jobs/my-jobs/${userId}`, { method: "GET" })
+    fetch(`https://job-posting-server-puce.vercel.app/Jobs/my-jobs/${userId}`, { method: "GET" })
       .then((data) => data.json())
       .then((result) => setJobs(result)).then(()=>{
         setLoading(false)

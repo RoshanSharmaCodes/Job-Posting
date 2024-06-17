@@ -22,7 +22,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    fetch("https://job-posting-server.vercel.app/Jobs/all-jobs")
+    fetch("https://job-posting-server-puce.vercel.app/Jobs/all-jobs")
       .then((res) => res.json())
       .then((data) => setJobs(data))
   }, [])
