@@ -8,7 +8,7 @@ export default function Newsletter() {
   const [successModal, setSuccessModal] = useState(false)
   const handleSubscribeNewletter = async () => {
     try {
-      const res = await fetch("http://localhost:3000/Subscribe/Newsletter", {
+      const res = await fetch("https://job-posting-server.vercel.app/Subscribe/Newsletter", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -30,7 +30,7 @@ export default function Newsletter() {
   }
   const handleCourseList = async () => {
     try {
-      const res = await fetch("http://localhost:3000/Subscribe/Newsletter", {
+      const res = await fetch("https://job-posting-server.vercel.app/Subscribe/Newsletter", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

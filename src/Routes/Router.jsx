@@ -45,7 +45,7 @@ const Router = createBrowserRouter([
       {
         path: "/edit-job/:id",
         element: <EditJob />,
-        loader: ({ params }) => fetch(`http://localhost:3000/edit-job/${params.id}`),
+        loader: ({ params }) => fetch(`https://job-posting-server.vercel.app/edit-job/${params.id}`),
       },
       {
         path: "/Profile",

@@ -39,7 +39,7 @@ export const UserProfile = () => {
 
   useEffect(()=>{
     try {
-      fetch(`http://localhost:3000/User/get-user/${userId.id}`, { method: "GET", headers: { "content-type": "application/json" }})
+      fetch(`https://job-posting-server.vercel.app/User/get-user/${userId.id}`, { method: "GET", headers: { "content-type": "application/json" }})
         .then((data) => data.json())
         .then((result) => {
           setCandidate(result.user)

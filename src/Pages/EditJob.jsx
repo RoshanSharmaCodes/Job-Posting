@@ -19,7 +19,7 @@ export default function EditJob() {
   const onSubmit = (data) => {
     data.skills = selectedOption
     console.log("Post Job", data)
-    fetch(`http://localhost:3000/Jobs/update-job/${id}`, {
+    fetch(`https://job-posting-server.vercel.app/Jobs/update-job/${id}`, {
       method: "PATCH",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(data),

@@ -24,7 +24,7 @@ export default function Card({ data, apply = false, del = false }) {
     var jobId = data.jobId
     var applicantInfo = {name: profileInfo.info.firstName +" "+ profileInfo.info.lastName, pitch: pitch, applicantId: profileInfo.info.userId }
     try {
-      fetch(`http://localhost:3000/Jobs/apply-job/${jobId}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(applicantInfo) })
+      fetch(`https://job-posting-server.vercel.app/Jobs/apply-job/${jobId}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(applicantInfo) })
         .then((data) => data.json())
         .then((result) => {
           console.log("Result:", result)

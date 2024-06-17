@@ -92,7 +92,7 @@ export const handleEmailandPasswordSignUp = async (email, password) => {
     // Pull out user's data from the userCredential property
     const user = userCredential.user
     const data = {emailId: email, password: password}
-    fetch("http://localhost:3000/User/SignUp", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data) })
+    fetch("https://job-posting-server.vercel.app/User/SignUp", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data) })
       .then((data) => data.json())
       .then((result) => {
         console.log("Result:", result)
